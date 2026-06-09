@@ -9,7 +9,20 @@ const category = defineType({
     defineField({ name: "name", title: "Category Name", type: "string" }),
     defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "name" } }),
     defineField({ name: "icon", title: "Icon (emoji)", type: "string" }),
-    defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
+    defineField({
+      name: "images", 
+      title: "Images", 
+      type: "array",
+      of: [{
+        type: "object",
+        name: "externalImage",
+        title: "External Image",
+        fields: [
+          defineField({ name: "url", type: "url", title: "Image URL" }),
+          defineField({ name: "alt", type: "string", title: "Alt Text" })
+        ]
+      }],
+    }),
     defineField({ name: "description", title: "Description", type: "text" }),
     defineField({ name: "order", title: "Display Order", type: "number" }),
   ],
@@ -43,10 +56,17 @@ const product = defineType({
     defineField({ name: "category", title: "Category", type: "reference", to: [{ type: "category" }] }),
     defineField({ name: "brand", title: "Brand", type: "reference", to: [{ type: "brand" }] }),
     defineField({
-      name: "images", title: "Images", type: "array",
+      name: "images", 
+      title: "Images", 
+      type: "array",
       of: [{
-        type: "image", options: { hotspot: true },
-        fields: [{ name: "alt", type: "string", title: "Alt Text" }]
+        type: "object",
+        name: "externalImage",
+        title: "External Image",
+        fields: [
+          defineField({ name: "url", type: "url", title: "Image URL" }),
+          defineField({ name: "alt", type: "string", title: "Alt Text" })
+        ]
       }],
     }),
     defineField({ name: "price", title: "Price (₹)", type: "number" }),
@@ -79,7 +99,7 @@ const product = defineType({
     }),
   ],
   preview: {
-    select: { title: "name", subtitle: "category.name", media: "images.0" },
+    select: { title: "name", subtitle: "category.name" },
   },
 });
 
@@ -94,7 +114,15 @@ const testimonial = defineType({
     defineField({ name: "location", title: "Location", type: "string" }),
     defineField({ name: "message", title: "Message", type: "text" }),
     defineField({ name: "rating", title: "Rating (1-5)", type: "number" }),
-    defineField({ name: "image", title: "Photo", type: "image", options: { hotspot: true } }),
+    defineField({
+      name: "image", 
+      title: "Photo (External URL)", 
+      type: "object",
+      fields: [
+        defineField({ name: "url", type: "url", title: "Image URL" }),
+        defineField({ name: "alt", type: "string", title: "Alt Text" })
+      ]
+    }),
   ],
   preview: { select: { title: "name", subtitle: "location" } },
 });
@@ -106,7 +134,15 @@ const author = defineType({
   type: "document",
   fields: [
     defineField({ name: "name", title: "Name", type: "string" }),
-    defineField({ name: "image", title: "Photo", type: "image", options: { hotspot: true } }),
+    defineField({
+      name: "image", 
+      title: "Photo (External URL)", 
+      type: "object",
+      fields: [
+        defineField({ name: "url", type: "url", title: "Image URL" }),
+        defineField({ name: "alt", type: "string", title: "Alt Text" })
+      ]
+    }),
     defineField({ name: "bio", title: "Bio", type: "text" }),
   ],
   preview: { select: { title: "name" } },
